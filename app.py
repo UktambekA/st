@@ -4,7 +4,7 @@ import datetime
 from io import BytesIO
 
 # Streamlit sarlavha
-st.title("Mahsulotlar ro‘yxatini yaratish")
+st.title("📊 Mahsulotlar ro‘yxati va statistikasi")
 
 # Mahsulotlar uchun bo‘sh DataFrame
 if "data" not in st.session_state:
@@ -14,7 +14,8 @@ if "data" not in st.session_state:
 mahsulot_nomi = st.text_input("Mahsulot nomini kiriting:")
 mahsulot_narxi = st.number_input("Mahsulot narxini kiriting:", min_value=0.0, step=0.01)
 
-if st.button("Qo‘shish"):
+# Mahsulot qo‘shish tugmasi
+if st.button("➕ Qo‘shish"):
     if mahsulot_nomi and mahsulot_narxi:
         yangi_mahsulot = pd.DataFrame({
             "Mahsulot": [mahsulot_nomi],
@@ -24,11 +25,26 @@ if st.button("Qo‘shish"):
         st.session_state.data = pd.concat([st.session_state.data, yangi_mahsulot], ignore_index=True)
         st.success(f"✅ {mahsulot_nomi} mahsuloti qo‘shildi!")
 
-# Joriy jadvalni ko‘rsatish
-st.subheader("Kiritilgan mahsulotlar:")
+# Tozalash funksiyasi
+if st.button("🗑️ Tozalash"):
+    st.session_state.data = pd.DataFrame(columns=["Mahsulot", "Narx", "Sana"])
+    st.success("🔄 Ma'lumotlar tozalandi!")
+
+# Joriy mahsulotlar ro‘yxatini ko‘rsatish
+st.subheader("📋 Kiritilgan mahsulotlar:")
 st.write(st.session_state.data)
 
-# Excel faylni yaratish va yuklab olish uchun funksiya
+# Statistik tahlil
+if not st.session_state.data.empty:
+    st.subheader("📊 Mahsulot statistikasini ko‘rish")
+    
+    # Mahsulot bo‘yicha umumiy narx hisobi
+    chart_data = st.session_state.data.groupby("Mahsulot")["Narx"].sum().reset_index()
+    
+    # Bar chart orqali mahsulotlarning narxlari taqsimotini ko‘rsatish
+    st.bar_chart(chart_data.set_index("Mahsulot"))
+
+# Excel fayl yaratish va yuklab olish uchun funksiya
 def create_excel_download_link(df):
     output = BytesIO()
     with pd.ExcelWriter(output, engine="openpyxl") as writer:
