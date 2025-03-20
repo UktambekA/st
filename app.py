@@ -26,7 +26,8 @@ st.title("📊 Mahsulotlar ro‘yxati")
 
 # Foydalanuvchidan mahsulot nomi va narxini kiritish
 mahsulot_nomi = st.text_input("Mahsulot nomini kiriting:")
-mahsulot_narxi = st.number_input("Mahsulot narxini kiriting:", min_value=0.0, step=0)
+mahsulot_narxi = st.number_input("Mahsulot narxini kiriting:", min_value=0.0, step=0.1
+                                )
 
 # Mahsulot qo‘shish tugmasi
 if st.button("➕ Qo‘shish"):
