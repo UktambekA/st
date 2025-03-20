@@ -22,11 +22,11 @@ def save_data(df):
 df = load_data()
 
 # Streamlit UI
-st.title("📊 Mahsulotlar ro‘yxati va statistikasi")
+st.title("📊 Mahsulotlar ro‘yxati")
 
 # Foydalanuvchidan mahsulot nomi va narxini kiritish
 mahsulot_nomi = st.text_input("Mahsulot nomini kiriting:")
-mahsulot_narxi = st.number_input("Mahsulot narxini kiriting:", min_value=0.0, step=0.01)
+mahsulot_narxi = st.number_input("Mahsulot narxini kiriting:", min_value=0, step=0.01)
 
 # Mahsulot qo‘shish tugmasi
 if st.button("➕ Qo‘shish"):
@@ -49,16 +49,6 @@ if st.button("🗑️ Tozalash"):
 # Joriy mahsulotlar ro‘yxatini ko‘rsatish
 st.subheader("📋 Kiritilgan mahsulotlar:")
 st.write(df)
-
-# Statistik tahlil
-if not df.empty:
-    st.subheader("📊 Mahsulot statistikasi")
-    
-    # Mahsulot bo‘yicha umumiy narx hisoblash
-    chart_data = df.groupby("Mahsulot")["Narx"].sum().reset_index()
-    
-    # Bar chart orqali mahsulot statistikasi
-    st.bar_chart(chart_data.set_index("Mahsulot"))
 
 # Excel fayl yaratish va yuklab olish
 def create_excel_download_link(df):
